@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Signup</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'snapchat/style.css' %}">
+</head>
+
+<body>
+    <div class="card">
+        <!-- Logo SVG -->
+        <!-- <span class="icons" style="font-family: 'Lobster', cursive; color: yellow; font-size: 60px;">
+            M
+        </span> -->
+        <img src="{% static 'snapchat/images/snaplogo.svg' %}" alt="Snapchat Logo" class="logo">
+
+        <h2>Snapchat</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <input type="text" name="username" placeholder="Username" required><br>
+            <input type="email" name="email" placeholder="Email" required><br>
+            <input type="password" name="password" placeholder="Password" required><br>
+            <input type="date" name="dob" placeholder="Date of Birth" required><br>
+            <label class="gender">Gender:</label>
+            <div style="display: flex; gap: 20px; align-items: center;">
+                <div>
+                    <input type="radio" id="male" name="gender" value="Male" required>
+                    <label for="male">Male</label>
+                </div>
+                <div>
+                    <input type="radio" id="female" name="gender" value="Female">
+                    <label for="female">Female</label>
+                </div>
+                <div>
+                    <input type="radio" id="other" name="gender" value="Other">
+                    <label for="other">Other</label>
+                </div>
+            </div>
+
+            <button type="submit">Sign Up</button>
+        </form>
+        <div style="text-align: center; margin: 15px 0;">
+            <span style="color: #888;">OR</span>
+        </div>
+        <!-- Google Signup Button
+        {% load socialaccount %}
+        <a href="{% provider_login_url 'google' %}" class="google-btn">
+            <img class="google" src="{% static 'snapchat/images/google.png' %}" alt="Google Icon">
+            Sign up with Google
+        </a> -->
+        <p class="account">Already have an account? <a href="{% url 'login' %}">Login</a></p>
+        {% for message in messages %}
+        <p class="message">{{ message }}</p>
+        {% endfor %}
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'snapchat/style.css' %}">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body {% if logged_in %}style="background-image: url('{% static 'snapchat/images/background.jpg' %}'); background-size: cover; background-position: center;"{% endif %}>
+    <div class="card">
+        <!-- Logo -->
+        <!-- <span class = "loginIcon" style="font-family: 'Lobster', cursive; color: #FFFC00; font-size: 60px;">
+            M
+        </span> -->
+        <img src="{% static 'snapchat/images/snaplogo.svg' %}" alt="Snapchat Logo" class="logo">
+
+        <h2 style="margin-bottom: 20px;">snapchat</h2>
+
+        <!-- Login form -->
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="input-container">
+                <i class="fas fa-user input-icon"></i>
+                <input type="text" name="username" placeholder="Username" required>
+            </div>
+
+            <div class="input-container">
+                <i class="fas fa-lock input-icon"></i>
+                <input type="password" name="password" placeholder="Password" required>
+            </div>
+
+            <button type="submit">Login</button>
+        </form>
+
+        <!-- Messages -->
+        {% if messages %}
+            {% for message in messages %}
+                <p class="message">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+
+        <p style="margin-top: 15px;">
+            Don't have an account? <a href="{% url 'signup' %}">Sign Up</a>
+        </p>
+    </div>
+</body>
+</html>

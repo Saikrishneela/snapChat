@@ -1,0 +1,128 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <link rel="stylesheet" href="{% static 'snapchat/home.css' %}">
+</head>
+
+<header class="header">
+    <div class="profile-icon" id="profileIcon">🧑‍💼</div>
+    <img src="{% static 'snapchat/images/snapHome.png' %}" alt="Snapchat Logo" class="logo">
+    <img src="{% static 'snapchat/images/Emoji.jpg' %}" alt="Profile Bitmoji" id="bitmojiImage" class="bitmoji hidden">
+    <div>
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="logout-btn">Logout</button>
+        </form>
+    </div>
+</header>
+
+<!-- Main Content -->
+<div class="container">
+    <!-- Chat Section -->
+    <div class="chat-section">
+        <!-- Search -->
+        <div class="search-container">
+            <span class="search-icon" id="chatSearchIcon">🔍</span>
+            <div class="chat-search-box hidden" id="chatSearchBox">
+                <input type="text" class="chat-search-input" placeholder="Search Chats...">
+            </div>
+            <h2 class="section-title">Chat</h2>
+        </div>
+
+        <!-- Add Button -->
+        <div class="chat-header">
+            <button class="add-btn" id="addBtn"><sup>+</sup></button>
+        </div>
+
+        <div class="tab-buttons">
+            <button id="chatsTab" class="active-tab">Chats</button>
+            <button id="requestsTab">Added Me</button>
+        </div>
+
+
+        <!-- Chat List -->
+        <div class="chat-list" id="chatList">
+            <!-- New chat items will appear here -->
+        </div>
+        <!-- Friend Requests Section -->
+        <div class="friend-requests">
+            <h2>Friend Requests</h2>
+            <div id="requestList"></div>
+        </div>
+
+    </div>
+
+
+    <!-- Stories Section -->
+    <div class="stories-section">
+        <div class="stories-search-container">
+            <span class="search-icon" id="storySearchIcon">🔍</span>
+            <h2 class="stories-title">Stories</h2>
+            <div class="story-search-box hidden" id="storySearchBox">
+                <input type="text" class="story-search-input" placeholder="Search Stories...">
+            </div>
+
+        </div>
+
+        <div class="my-story">
+            <div class="story-avatar">🤵</div>
+            <div class="story-info">
+                <div class="story-title-text">My Story</div>
+                <div class="story-time">👁️ 23 mins ago</div>
+            </div>
+            <div class="story-options">
+                <button id="dropdown"><span>⌄</span></button>
+                <span>⋮</span>
+            </div>
+        </div>
+        <div class="updates" id="update">
+            <h3 class="recent-updates">Recent Updates</h3>
+
+            <div class="stories-list" id="storyList">
+                <div class="story-item">
+                    <div class="story-avatar">👨‍💼</div>
+                    <div class="story-info">
+                        <div class="story-name">Aravind</div>
+                        <div class="story-time">👁️ 23 mins ago</div>
+                    </div>
+                </div>
+                <div class="story-item">
+                    <div class="story-avatar">👩‍💻</div>
+                    <div class="story-info">
+                        <div class="story-name">Prawjjal</div>
+                        <div class="story-time">👁️ 23 mins ago</div>
+                    </div>
+                </div>
+                <div class="story-item">
+                    <div class="story-avatar">👩‍🎨</div>
+                    <div class="story-info">
+                        <div class="story-name">Hema</div>
+                        <div class="story-time">👁️ 23 mins ago</div>
+                    </div>
+                </div>
+                <div class="story-item">
+                    <div class="story-avatar">👨‍🚀</div>
+                    <div class="story-info">
+                        <div class="story-name">RajKishor</div>
+                        <div class="story-time">👁️ 23 mins ago</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Footer -->
+<footer class="footer">
+    <button class="nav-btn">💬 Chat</button>
+    <button class="nav-btn">🌐 Stories</button>
+    <span class="nav-arrow">→</span>
+</footer>
+<script src="{% static 'snapchat/script.js/profile.js' %}"></script>
+</body>
+
+</html>
