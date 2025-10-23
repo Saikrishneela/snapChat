@@ -13,13 +13,168 @@
     <div class="profile-icon" id="profileIcon">🧑‍💼</div>
     <img src="{% static 'snapchat/images/snapHome.png' %}" alt="Snapchat Logo" class="logo">
     <img src="{% static 'snapchat/images/Emoji.jpg' %}" alt="Profile Bitmoji" id="bitmojiImage" class="bitmoji hidden">
-    <div>
-        <form method="post" action="{% url 'logout' %}">
+    <div style="display: flex; gap: 10px; align-items: center;">
+        <a href="/snaps.html" style="text-decoration: none;">
+            <button class="nav-link-btn">📸 Snaps</button>
+        </a>
+        <a href="/messages.html" style="text-decoration: none;">
+            <button class="nav-link-btn">💬 Messages</button>
+        </a>
+        <form method="post" action="{% url 'logout' %}" style="margin: 0;">
             {% csrf_token %}
             <button type="submit" class="logout-btn">Logout</button>
         </form>
     </div>
 </header>
+
+<style>
+    .nav-link-btn {
+        background: #0084ff;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+    
+    .nav-link-btn:hover {
+        background: #0073e6;
+    }
+    
+    .create-story-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-left: 10px;
+    }
+    
+    .create-story-btn:hover {
+        opacity: 0.9;
+    }
+    
+    .story-item {
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+    
+    .story-item:hover {
+        background: #f5f5f5;
+    }
+    
+    .story-badge {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background: #ff4444;
+        color: white;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: 600;
+    }
+    
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.95);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .modal.active {
+        display: flex;
+    }
+    
+    .modal-close {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: white;
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        font-size: 24px;
+        cursor: pointer;
+        z-index: 1001;
+    }
+    
+    .modal-content {
+        max-width: 90%;
+        max-height: 90%;
+        position: relative;
+    }
+    
+    .modal-image, .modal-video {
+        max-width: 100%;
+        max-height: 90vh;
+        border-radius: 8px;
+    }
+    
+    .story-caption {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0,0,0,0.7);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 20px;
+    }
+    
+    .story-form-modal {
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        max-width: 500px;
+        width: 90%;
+    }
+    
+    .form-group {
+        margin-bottom: 15px;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 600;
+    }
+    
+    .form-group input, .form-group textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+    }
+    
+    .submit-btn {
+        background: #0084ff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 20px;
+        font-weight: 600;
+        cursor: pointer;
+        width: 100%;
+    }
+</style>
 
 <!-- Main Content -->
 <div class="container">
@@ -69,60 +224,190 @@
 
         </div>
 
-        <div class="my-story">
-            <div class="story-avatar">🤵</div>
-            <div class="story-info">
-                <div class="story-title-text">My Story</div>
-                <div class="story-time">👁️ 23 mins ago</div>
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0;">
+            <div class="my-story" onclick="showCreateStoryModal()" style="cursor: pointer; flex: 1;">
+                <div class="story-avatar">🤵</div>
+                <div class="story-info">
+                    <div class="story-title-text">Create Story</div>
+                    <div class="story-time">Tap to add</div>
+                </div>
             </div>
-            <div class="story-options">
-                <button id="dropdown"><span>⌄</span></button>
-                <span>⋮</span>
-            </div>
+            <button class="create-story-btn" onclick="showCreateStoryModal()">+ Add Story</button>
         </div>
         <div class="updates" id="update">
             <h3 class="recent-updates">Recent Updates</h3>
 
             <div class="stories-list" id="storyList">
-                <div class="story-item">
-                    <div class="story-avatar">👨‍💼</div>
-                    <div class="story-info">
-                        <div class="story-name">Aravind</div>
-                        <div class="story-time">👁️ 23 mins ago</div>
-                    </div>
-                </div>
-                <div class="story-item">
-                    <div class="story-avatar">👩‍💻</div>
-                    <div class="story-info">
-                        <div class="story-name">Prawjjal</div>
-                        <div class="story-time">👁️ 23 mins ago</div>
-                    </div>
-                </div>
-                <div class="story-item">
-                    <div class="story-avatar">👩‍🎨</div>
-                    <div class="story-info">
-                        <div class="story-name">Hema</div>
-                        <div class="story-time">👁️ 23 mins ago</div>
-                    </div>
-                </div>
-                <div class="story-item">
-                    <div class="story-avatar">👨‍🚀</div>
-                    <div class="story-info">
-                        <div class="story-name">RajKishor</div>
-                        <div class="story-time">👁️ 23 mins ago</div>
-                    </div>
-                </div>
+                <p style="text-align: center; color: #999; padding: 20px;">Loading stories...</p>
             </div>
         </div>
     </div>
 </div>
 <!-- Footer -->
 <footer class="footer">
-    <button class="nav-btn">💬 Chat</button>
-    <button class="nav-btn">🌐 Stories</button>
-    <span class="nav-arrow">→</span>
+    <button class="nav-btn" onclick="window.location.href='/messages.html'">💬 Messages</button>
+    <button class="nav-btn" onclick="loadStories()">🌐 Stories</button>
+    <button class="nav-btn" onclick="window.location.href='/snaps.html'">📸 Snaps</button>
 </footer>
+
+<!-- Story View Modal -->
+<div id="storyModal" class="modal">
+    <button class="modal-close" onclick="closeStoryModal()">✕</button>
+    <div class="modal-content" id="storyModalContent"></div>
+</div>
+
+<!-- Create Story Modal -->
+<div id="createStoryModal" class="modal">
+    <button class="modal-close" onclick="closeCreateStoryModal()">✕</button>
+    <div class="story-form-modal">
+        <h2 style="margin-bottom: 20px;">Create Your Story</h2>
+        <form id="createStoryForm">
+            <div class="form-group">
+                <label>Upload Photo/Video</label>
+                <input type="file" id="storyMedia" accept="image/*,video/*" required>
+            </div>
+            <div class="form-group">
+                <label>Caption (Optional)</label>
+                <input type="text" id="storyCaption" placeholder="Add a caption..." maxlength="200">
+            </div>
+            <button type="submit" class="submit-btn">Post Story</button>
+        </form>
+    </div>
+</div>
+
 <script src="{% static 'snapchat/script.js/profile.js' %}"></script>
+<script>
+    // Story Functions
+    async function loadStories() {
+        const response = await fetch('/story/all/');
+        const stories = await response.json();
+        
+        const storyList = document.getElementById('storyList');
+        
+        if (stories.length === 0) {
+            storyList.innerHTML = '<p style="text-align: center; color: #999; padding: 20px;">No stories available</p>';
+            return;
+        }
+        
+        storyList.innerHTML = '';
+        
+        // Group stories by creator
+        const groupedStories = {};
+        stories.forEach(story => {
+            if (!groupedStories[story.creator]) {
+                groupedStories[story.creator] = [];
+            }
+            groupedStories[story.creator].push(story);
+        });
+        
+        // Display one item per creator
+        Object.keys(groupedStories).forEach(creator => {
+            const userStories = groupedStories[creator];
+            const latestStory = userStories[0];
+            
+            const storyItem = document.createElement('div');
+            storyItem.className = 'story-item';
+            storyItem.onclick = () => viewStory(latestStory.id);
+            
+            // Add badge if not viewed
+            const badge = !latestStory.has_viewed ? '<div class="story-badge">!</div>' : '';
+            
+            storyItem.innerHTML = `
+                <div style="position: relative;">
+                    <div class="story-avatar">${latestStory.is_own_story ? '🤵' : '👤'}</div>
+                    ${badge}
+                </div>
+                <div class="story-info">
+                    <div class="story-name">${creator}${latestStory.is_own_story ? ' (You)' : ''}</div>
+                    <div class="story-time">👁️ ${latestStory.view_count} views</div>
+                </div>
+            `;
+            
+            storyList.appendChild(storyItem);
+        });
+    }
+
+    async function viewStory(storyId) {
+        const response = await fetch(`/story/view/${storyId}/`, {
+            method: 'POST'
+        });
+        const result = await response.json();
+        
+        if (result.error) {
+            alert(result.error);
+            return;
+        }
+        
+        const modal = document.getElementById('storyModal');
+        const content = document.getElementById('storyModalContent');
+        
+        let mediaElement;
+        if (result.media_type === 'image') {
+            mediaElement = `<img src="${result.media_url}" class="modal-image">`;
+        } else {
+            mediaElement = `<video src="${result.media_url}" class="modal-video" autoplay controls></video>`;
+        }
+        
+        content.innerHTML = `
+            ${mediaElement}
+            ${result.caption ? `<div class="story-caption">${result.caption}</div>` : ''}
+            <div style="position: absolute; top: 20px; left: 20px; color: white; background: rgba(0,0,0,0.6); padding: 10px 15px; border-radius: 20px;">
+                <strong>${result.creator}</strong><br>
+                <small>${result.created_at}</small>
+            </div>
+        `;
+        
+        modal.classList.add('active');
+        
+        // Refresh stories list after viewing
+        setTimeout(() => loadStories(), 1000);
+    }
+
+    function closeStoryModal() {
+        document.getElementById('storyModal').classList.remove('active');
+    }
+
+    function showCreateStoryModal() {
+        document.getElementById('createStoryModal').classList.add('active');
+    }
+
+    function closeCreateStoryModal() {
+        document.getElementById('createStoryModal').classList.remove('active');
+    }
+
+    // Create story
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('createStoryForm').onsubmit = async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData();
+            formData.append('media', document.getElementById('storyMedia').files[0]);
+            formData.append('caption', document.getElementById('storyCaption').value);
+            
+            const response = await fetch('/story/create/', {
+                method: 'POST',
+                body: formData
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                alert('Story created successfully! 🎉');
+                closeCreateStoryModal();
+                document.getElementById('createStoryForm').reset();
+                loadStories();
+            } else {
+                alert(result.error || 'Failed to create story');
+            }
+        };
+        
+        // Load stories on page load
+        loadStories();
+        
+        // Refresh stories every 30 seconds
+        setInterval(loadStories, 30000);
+    });
+</script>
 </body>
 
 </html>
